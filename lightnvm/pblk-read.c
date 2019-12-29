@@ -335,7 +335,7 @@ split_retry:
 		rqd->nr_ppas = nr_secs;
 
         /* NVMOP1 Begin */
-        printk("ocssd test: number of read sectors = %u", nr_secs);
+        //printk("ocssd test: number of read sectors = %u", nr_secs);
         
         /* NVMOP1 End */
 

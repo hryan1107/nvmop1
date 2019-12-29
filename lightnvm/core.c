@@ -737,7 +737,8 @@ int nvm_submit_io(struct nvm_tgt_dev *tgt_dev, struct nvm_rq *rqd)
 	int ret;
     
     /* NVM OP1 Begin */
-    struct ppa_addr *p;
+	int i, n_secs;
+	printk("ocssd op1 debug start.");
     
     /* NVM OP1 End */
 
@@ -752,11 +753,13 @@ int nvm_submit_io(struct nvm_tgt_dev *tgt_dev, struct nvm_rq *rqd)
 	/* In case of error, fail with right address format */
 	
 	/* NVM OP1 Begin */
-	p = rqd->ppa_list;
-	while(p != NULL){
-		printk("ocssd test: user read PPA =  %llu, LBA =  %u\n", p->ppa, p->m.sec);
-        p++;
-	}
+	n_secs = rqd->nr_ppas;
+	printk("ocssd read PPA start print.");
+	
+	for (i = 0; i < n_secs; i++) {
+		struct ppa_addr ppa = rqd->ppa_list[i];
+		printk("ocssd: user read PPA =  %llu, LBA =  %u\n", ppa.ppa, ppa.m.sec);
+	}	
 
 	/* NVM OP1 End */
 
