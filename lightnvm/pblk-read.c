@@ -333,6 +333,12 @@ split_retry:
 		 */
 		bio = split_bio;
 		rqd->nr_ppas = nr_secs;
+
+        /* NVMOP1 Begin */
+        printk("ocssd test: number of read sectors = %u", nr_secs);
+        
+        /* NVMOP1 End */
+
 		if (rqd->nr_ppas == 1)
 			rqd->ppa_addr = rqd->ppa_list[0];
 

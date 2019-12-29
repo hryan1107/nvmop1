@@ -735,6 +735,11 @@ int nvm_submit_io(struct nvm_tgt_dev *tgt_dev, struct nvm_rq *rqd)
 {
 	struct nvm_dev *dev = tgt_dev->parent;
 	int ret;
+    
+    /* NVM OP1 Begin */
+    struct ppa_addr *p;
+    
+    /* NVM OP1 End */
 
 	if (!dev->ops->submit_io)
 		return -ENODEV;
@@ -745,6 +750,16 @@ int nvm_submit_io(struct nvm_tgt_dev *tgt_dev, struct nvm_rq *rqd)
 	rqd->flags = nvm_set_flags(&tgt_dev->geo, rqd);
 
 	/* In case of error, fail with right address format */
+	
+	/* NVM OP1 Begin */
+	p = rqd->ppa_list;
+	while(p != NULL){
+		printk("ocssd test: user read PPA =  %llu, LBA =  %u\n", p->ppa, p->m.sec);
+        p++;
+	}
+
+	/* NVM OP1 End */
+
 	ret = dev->ops->submit_io(dev, rqd);
 	if (ret)
 		nvm_rq_dev_to_tgt(tgt_dev, rqd);
