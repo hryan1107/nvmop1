@@ -754,10 +754,12 @@ int nvm_submit_io(struct nvm_tgt_dev *tgt_dev, struct nvm_rq *rqd)
 	
 	/* NVM OP1 Begin */
 	n_secs = rqd->nr_ppas;
-	printk("ocssd read PPA start print.");
-	
+	struct ppa_addr *ppa_list = rqd->ppa_list;
+	printk("ocssd read start print PPAs. Number of sectors = %d\n", n_secs);
+	printk("=====================================================\n");
+		
 	for (i = 0; i < n_secs; i++) {
-		struct ppa_addr ppa = rqd->ppa_list[i];
+		struct ppa_addr ppa = ppa_list[i];
 		printk("ocssd: user read PPA =  %llu, LBA =  %u\n", ppa.ppa, ppa.m.sec);
 	}	
 
