@@ -1,0 +1,1 @@
+sudo qemu-system-x86_64 ubuntu.img -m 16G -smp 12 -cpu host --enable-kvm -hdc /opt/share.img

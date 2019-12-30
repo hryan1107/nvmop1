@@ -1,0 +1,1 @@
+qemu-system-x86_64 ubuntu.img -m 16G -smp 12 -cpu host --enable-kvm -blockdev ocssd,node-name=nvme01,file.driver=file,file.filename=ocssd.img -device nvme,drive=nvme01,serial=deadbeef,id=lnvm
