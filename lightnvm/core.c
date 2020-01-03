@@ -755,7 +755,7 @@ int nvm_submit_io(struct nvm_tgt_dev *tgt_dev, struct nvm_rq *rqd)
 	/* NVM OP1 Begin */
 	n_secs = rqd->nr_ppas;
 	struct ppa_addr *ppa_list = rqd->ppa_list;
-	printk("ocssd user read start print PPAs. Number of sectors = %d\n", n_secs);
+	printk("ocssd read start print PPAs. Number of sectors = %d\n", n_secs);
 	printk("=====================================================\n");
 	
 	if(n_secs > 1){		
@@ -763,7 +763,13 @@ int nvm_submit_io(struct nvm_tgt_dev *tgt_dev, struct nvm_rq *rqd)
             struct ppa_addr ppa = ppa_list[i];
             printk("ocssd: user read PPA =  %llu, LBA =  %u\n", ppa.ppa, ppa.m.sec);
         }
-	}	
+	}
+    /*else{
+        if(n_secs == 1){
+            struct ppa_addr ppa = ppa_list[0];
+            printk("ocssd: user read PPA =  %llu, LBA =  %u\n", ppa.ppa, ppa.m.sec);
+        }
+    }*/	
 
 	/* NVM OP1 End */
 
