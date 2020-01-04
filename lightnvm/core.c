@@ -767,10 +767,9 @@ int nvm_submit_io(struct nvm_tgt_dev *tgt_dev, struct nvm_rq *rqd)
             /* n_sec = 1 */
             struct ppa_addr* ppa = ppa_list;
             printk("ocssd: user read PPA =  %llu, LBA =  %u\n", ppa->ppa, ppa->m.sec);
-        }
     }
 
-    printk("======================= ocssdUSER read ends. ================================================\n", n_secs);
+    printk("======================= ocssdUSER read ends ================================================\n");
     
 
 	/* NVM OP1 End */
@@ -816,16 +815,21 @@ int nvm_submit_io_sync(struct nvm_tgt_dev *tgt_dev, struct nvm_rq *rqd)
             /* n_sec = 1 */
             struct ppa_addr *ppa = ppa_list;
             printk("ocssdGC: user read PPA =  %llu, LBA =  %u\n", ppa->ppa, ppa->m.sec);
-        }
     } 
-    printk("=================== ocssdGC read request ends. ===============================================\n", n_secs);
+    printk("=================== ocssdGC read request ends ===============================================\n");
 
     /* NVM OP1 End */
 
 
 	/* In case of error, fail with right address format */
 	ret = dev->ops->submit_io_sync(dev, rqd);
+
+    /* NVM OP1 start */
+    //if (ret)
+    //    nvm_rq_dev_to_tgt(tgt_dev, rqd);
 	nvm_rq_dev_to_tgt(tgt_dev, rqd);
+    
+    /* NVM OP1 start */
 
 	return ret;
 }
