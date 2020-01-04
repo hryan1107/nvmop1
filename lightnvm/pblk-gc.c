@@ -309,6 +309,10 @@ static int pblk_gc_line(struct pblk *pblk, struct pblk_line *line)
 
 	pblk_debug(pblk, "line '%d' being reclaimed for GC\n", line->id);
 
+    /* NVM OP1 start */
+    printk("ocssdGC: flash block line '%d' being reclaimed for GC\n", line->id);
+
+    /* NVM OP1 end */
 	line_ws = kmalloc(sizeof(struct pblk_line_ws), GFP_KERNEL);
 	if (!line_ws)
 		return -ENOMEM;

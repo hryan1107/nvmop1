@@ -1178,6 +1178,10 @@ static void *pblk_init(struct nvm_tgt_dev *dev, struct gendisk *tdisk,
 	trace_pblk_state(pblk_disk_name(pblk), pblk->state);
 	pblk->gc.gc_enabled = 0;
 
+    /* NVM OP1 start */
+    printk("ocssd Device name: %s, Device state: %d\n", pblk_disk_name(pblk), pblk->state);
+
+    /* NVM OP1 end */
 	if (!(geo->version == NVM_OCSSD_SPEC_12 ||
 					geo->version == NVM_OCSSD_SPEC_20)) {
 		pblk_err(pblk, "OCSSD version not supported (%u)\n",

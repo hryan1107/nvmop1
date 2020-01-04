@@ -469,6 +469,11 @@ int pblk_submit_read_gc(struct pblk *pblk, struct pblk_gc_rq *gc_rq)
 	rqd.nr_ppas = gc_rq->secs_to_gc;
 	rqd.bio = bio;
 
+    /* NVM OP1 start */
+    printk("=======================  ocssdGC: victim flash block number: %d ============================\n", gc_rq->line->id);
+
+    /* NVM OP1 end */
+
 	if (pblk_submit_io_sync(pblk, &rqd)) {
 		ret = -EIO;
 		goto err_free_bio;
