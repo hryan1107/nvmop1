@@ -480,6 +480,12 @@ next_gc_group:
 		line->state = PBLK_LINESTATE_GC;
 		trace_pblk_line_state(pblk_disk_name(pblk), line->id,
 					line->state);
+        
+        /* NVM OP1 start */
+        printk("========= ocssdGC: Init GC with Disk name: %s, victim block state: %d ==========\n", pblk_disk_name(pblk), line->state);
+
+        /* NVM OP1 end */
+        
 		spin_unlock(&line->lock);
 
 		list_del(&line->list);
@@ -493,6 +499,12 @@ next_gc_group:
 		pblk_gc_reader_kick(gc);
 
 		prev_group = 1;
+
+        /* NVM OP1 start */
+          printk("========= ocssdGC: Starting run GC and select victim block li  ne number: %u, with %u valid pages ==========\n", line->id, le32_to_cpu(*line  ->vsc));
+
+          /* NVM OP1 end */
+
 
 		/* No need to queue up more GC lines than we can handle */
 		run_gc = pblk_gc_should_run(&pblk->gc, &pblk->rl);
