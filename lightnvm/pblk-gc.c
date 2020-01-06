@@ -483,6 +483,8 @@ next_gc_group:
         
         /* NVM OP1 start */
         printk("========= ocssdGC: Init GC with Disk name: %s, victim block state: %d ==========\n", pblk_disk_name(pblk), line->state);
+        
+        printk("========= ocssdGC: Victim block line number: %u, with %u valid pages ==========\n", line->id, le32_to_cpu(*line->vsc));
 
         /* NVM OP1 end */
         
@@ -501,7 +503,7 @@ next_gc_group:
 		prev_group = 1;
 
         /* NVM OP1 start */
-          printk("========= ocssdGC: Starting run GC and select victim block li  ne number: %u, with %u valid pages ==========\n", line->id, le32_to_cpu(*line  ->vsc));
+         /* printk("========= ocssdGC: Starting run GC and select victim block li  ne number: %u, with %u valid pages ==========\n", line->id, le32_to_cpu(*line  ->vsc));*/
 
           /* NVM OP1 end */
 

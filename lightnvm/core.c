@@ -760,18 +760,17 @@ int nvm_submit_io(struct nvm_tgt_dev *tgt_dev, struct nvm_rq *rqd)
 	if(n_secs > 1){		
         for (i = 0; i < n_secs; i++) {
             struct ppa_addr ppa = ppa_list[i];
-            printk("ocssdUSER: user read PPA =  %llu, LBA =  %u\n", ppa.ppa, ppa.m.sec);
+            printk("ocssdUSER read PPA =  %llu\n", ppa.ppa);
         }
 	}
     else{
             /* n_sec = 1 */
             struct ppa_addr* ppa = ppa_list;
-            printk("ocssdUSER: user read PPA =  %llu, LBA =  %u\n", ppa->ppa, ppa->m.sec);
+            printk("ocssdUSER read PPA =  %llu\n", ppa->ppa);
     }
 
     printk("======================= ocssdUSER read ends ================================================\n");
     
-
 	/* NVM OP1 End */
 
 	ret = dev->ops->submit_io(dev, rqd);
@@ -808,13 +807,13 @@ int nvm_submit_io_sync(struct nvm_tgt_dev *tgt_dev, struct nvm_rq *rqd)
     if(n_secs > 1){     
         for (i = 0; i < n_secs; i++) {
             struct ppa_addr ppa = ppa_list[i];
-            printk("ocssdGC: GC read PPA =  %llu, LBA =  %u\n", ppa.ppa, ppa.m.sec);
+            printk("ocssdGC read PPA =  %llu\n", ppa.ppa);
         }
     }
     else{
             /* n_sec = 1 */
             struct ppa_addr *ppa = ppa_list;
-            printk("ocssdGC: GC read PPA =  %llu, LBA =  %u\n", ppa->ppa, ppa->m.sec);
+            printk("ocssdGC read PPA =  %llu\n", ppa->ppa);
     } 
     printk("=================== ocssdGC read request ends ===============================================\n");
 
