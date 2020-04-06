@@ -310,7 +310,7 @@ static int pblk_gc_line(struct pblk *pblk, struct pblk_line *line)
 	pblk_debug(pblk, "line '%d' being reclaimed for GC\n", line->id);
 
     /* NVM OP1 start */
-    printk("ocssdGC: flash block line '%d' being reclaimed for GC\n", line->id);
+    printk("MYOCSSD pblkgc: flash block line '%d' being reclaimed for GC\n", line->id);
 
     /* NVM OP1 end */
 	line_ws = kmalloc(sizeof(struct pblk_line_ws), GFP_KERNEL);
@@ -482,9 +482,9 @@ next_gc_group:
 					line->state);
         
         /* NVM OP1 start */
-        printk("========= ocssdGC: Init GC with Disk name: %s, victim block state: %d ==========\n", pblk_disk_name(pblk), line->state);
+        printk("MYOCSSD pblkgc: Init GC with Disk name: %s, victim block state: %d ==========\n", pblk_disk_name(pblk), line->state);
         
-        printk("========= ocssdGC: Victim block line number: %u, with %u valid pages ==========\n", line->id, le32_to_cpu(*line->vsc));
+        printk("MYOCSSD pblkgc: Victim block line number: %u, with %u valid pages ==========\n", line->id, le32_to_cpu(*line->vsc));
 
         /* NVM OP1 end */
         
@@ -501,11 +501,6 @@ next_gc_group:
 		pblk_gc_reader_kick(gc);
 
 		prev_group = 1;
-
-        /* NVM OP1 start */
-         /* printk("========= ocssdGC: Starting run GC and select victim block li  ne number: %u, with %u valid pages ==========\n", line->id, le32_to_cpu(*line  ->vsc));*/
-
-          /* NVM OP1 end */
 
 
 		/* No need to queue up more GC lines than we can handle */
@@ -584,6 +579,11 @@ static void pblk_gc_start(struct pblk *pblk)
 {
 	pblk->gc.gc_active = 1;
 	pblk_debug(pblk, "gc start\n");
+
+    /* NVM OP1 start */
+    
+    printk("MYOCSSD pblkgc: gc start\n");
+    /* NVM OP1 end */
 }
 
 void pblk_gc_should_start(struct pblk *pblk)

@@ -334,11 +334,6 @@ split_retry:
 		bio = split_bio;
 		rqd->nr_ppas = nr_secs;
 
-        /* NVMOP1 Begin */
-        //printk("ocssd test: number of read sectors = %u", nr_secs);
-        
-        /* NVMOP1 End */
-
 		if (rqd->nr_ppas == 1)
 			rqd->ppa_addr = rqd->ppa_list[0];
 
@@ -470,7 +465,7 @@ int pblk_submit_read_gc(struct pblk *pblk, struct pblk_gc_rq *gc_rq)
 	rqd.bio = bio;
 
     /* NVM OP1 start */
-    printk("=======================  ocssdGC: victim flash block number: %d ============================\n", gc_rq->line->id);
+    printk("MYOCSSD pblkread: victim flash block number: %d\n", gc_rq->line->id);
 
     /* NVM OP1 end */
 

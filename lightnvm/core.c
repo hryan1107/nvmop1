@@ -755,21 +755,21 @@ int nvm_submit_io(struct nvm_tgt_dev *tgt_dev, struct nvm_rq *rqd)
 	n_secs = rqd->nr_ppas;
 	//struct ppa_addr *ppa_list = rqd->ppa_list;
 	struct ppa_addr *ppa_list = nvm_rq_to_ppa_list(rqd);
-	printk("======================= ocssdUSER read starts. Number of sectors = %d =======================\n", n_secs);
+	//printk("======================= ocssdUSER read starts. Number of sectors = %d =======================\n", n_secs);
 	
 	if(n_secs > 1){		
         for (i = 0; i < n_secs; i++) {
             struct ppa_addr ppa = ppa_list[i];
-            printk("ocssdUSER read PPA =  %llu\n", ppa.ppa);
+            printk("MYOCSSD core: USER READ PPA =  %llu\n", ppa.ppa);
         }
 	}
     else{
             /* n_sec = 1 */
             struct ppa_addr* ppa = ppa_list;
-            printk("ocssdUSER read PPA =  %llu\n", ppa->ppa);
+            printk("MYOCSSD core: USER READ PPA =  %llu\n", ppa->ppa);
     }
 
-    printk("======================= ocssdUSER read ends ================================================\n");
+    //printk("======================= ocssdUSER read ends ================================================\n");
     
 	/* NVM OP1 End */
 
@@ -802,20 +802,20 @@ int nvm_submit_io_sync(struct nvm_tgt_dev *tgt_dev, struct nvm_rq *rqd)
     /* NVM OP1 Begin */
     n_secs = rqd->nr_ppas;
     struct ppa_addr *ppa_list = nvm_rq_to_ppa_list(rqd);
-    printk("==================== ocssdGC read request starts. Number of sectors = %d ====================\n", n_secs);
+    //printk("==================== ocssdGC read request starts. Number of sectors = %d ====================\n", n_secs);
                                                                                                                                                                        
     if(n_secs > 1){     
         for (i = 0; i < n_secs; i++) {
             struct ppa_addr ppa = ppa_list[i];
-            printk("ocssdGC read PPA =  %llu\n", ppa.ppa);
+            printk("MYOCSSD core: GC READ PPA =  %llu\n", ppa.ppa);
         }
     }
     else{
             /* n_sec = 1 */
             struct ppa_addr *ppa = ppa_list;
-            printk("ocssdGC read PPA =  %llu\n", ppa->ppa);
+            printk("MYOCSSD core: GC READ PPA =  %llu\n", ppa->ppa);
     } 
-    printk("=================== ocssdGC read request ends ===============================================\n");
+    //printk("=================== ocssdGC read request ends ===============================================\n");
 
     /* NVM OP1 End */
 

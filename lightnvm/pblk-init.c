@@ -184,11 +184,22 @@ static int pblk_rwb_init(struct pblk *pblk)
 	threshold = geo->mw_cunits * geo->all_luns;
 	pgs_in_buffer = (max(geo->mw_cunits, geo->ws_opt) + geo->ws_opt)
 								* geo->all_luns;
+    
 
 	if (write_buffer_size && (write_buffer_size > pgs_in_buffer))
 		buffer_size = write_buffer_size;
 	else
 		buffer_size = pgs_in_buffer;
+
+
+    /* NVM OP1 start */
+    if (!write_buffer_size)
+        printk("no write_buffer_size parameter.");
+
+    printk("MYOCSSD pblkinit: write buffer size = %lu, pages in buffer = %d\n", buffer_size, pgs_in_buffer);
+
+    /* NVM OP1 end */
+
 
 	return pblk_rb_init(&pblk->rwb, buffer_size, threshold, geo->csecs);
 }
@@ -1179,7 +1190,7 @@ static void *pblk_init(struct nvm_tgt_dev *dev, struct gendisk *tdisk,
 	pblk->gc.gc_enabled = 0;
 
     /* NVM OP1 start */
-    printk("ocssd Device name: %s, Device state: %d\n", pblk_disk_name(pblk), pblk->state);
+    /* printk("ocssd Device name: %s, Device state: %d\n", pblk_disk_name(pblk), pblk->state); */
 
     /* NVM OP1 end */
 	if (!(geo->version == NVM_OCSSD_SPEC_12 ||

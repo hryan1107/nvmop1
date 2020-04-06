@@ -110,6 +110,10 @@ retry:
 	w_ctx.flags = PBLK_IOTYPE_GC;
 	pblk_ppa_set_empty(&w_ctx.ppa);
 
+    /* NVM OP1 start */
+    printk("MYOCSSD pblkcache: GC start copying valid data to host write buffer.\n");
+
+    /* NVM OP1 end */
 	for (i = 0, valid_entries = 0; i < gc_rq->nr_secs; i++) {
 		if (gc_rq->lba_list[i] == ADDR_EMPTY)
 			continue;
@@ -123,6 +127,11 @@ retry:
 		data += PBLK_EXPOSED_PAGE_SIZE;
 		valid_entries++;
 	}
+
+    /* NVM OP1 start */
+    printk("MYOCSSD pblkcache(%d): GC finish copying valid data which occupy %d entries of host write buffer.\n", valid_entries, valid_entries);
+
+    /* NVM OP1 end */
 
 	WARN_ONCE(gc_rq->secs_to_gc != valid_entries,
 					"pblk: inconsistent GC write\n");
