@@ -190,6 +190,15 @@ static int pblk_rwb_init(struct pblk *pblk)
 	else
 		buffer_size = pgs_in_buffer;
 
+	/* NTU NVM start */
+    if (!write_buffer_size)
+        printk("no write_buffer_size parameter.");
+
+    printk("MYOCSSD pblkinit: sec size = %d, sectors per chunk = %u, chunk per lun = %u, all luns = %d, all chunks = %d\n", geo->csecs, geo->clba, geo->num_chk, geo->all_luns, geo->all_chunks);
+    printk("MYOCSSD pblkinit: write buffer size = %lu, pages in buffer = %d\n", buffer_size, pgs_in_buffer);                                         
+
+    /* NTU NVM end */
+
 	return pblk_rb_init(&pblk->rwb, buffer_size, threshold, geo->csecs);
 }
 

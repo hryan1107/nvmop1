@@ -110,6 +110,12 @@ int pblk_rb_init(struct pblk_rb *rb, unsigned int size, unsigned int threshold,
 		iter = 1;
 	}
 
+	/* NTU NVM start*/
+    printk("MYOCSSD pblkrb: created %u buffer entries, initial write buffer Number of entries = %u, order = %u, iter = %u\n", nr_entries, rb->nr_entries, order, iter);
+                                                                                                                                                     
+    /* NTU NVM end */
+
+
 	do {
 		struct pblk_rb_entry *entry;
 		struct pblk_rb_pages *page_set;
