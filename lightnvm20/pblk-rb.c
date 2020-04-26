@@ -338,6 +338,12 @@ static void __pblk_rb_write_entry(struct pblk_rb *rb, void *data,
 
 	entry->w_ctx.lba = w_ctx.lba;
 	entry->w_ctx.ppa = w_ctx.ppa;
+
+	/* NTU NVM Begin */
+	printk("MYOCSSD pblkrb user or gc write lba, ppa: %lu, %lu", entry->w_ctx.lba, entry->w_ctx.ppa.ppa);
+	printk("MYOCSSD pblkrb user or gc write ppa grp, pu: %lu, %lu", entry->w_ctx.ppa.m.grp, entry->w_ctx.ppa.m.pu);
+	
+	/* NTU NVM End */
 }
 
 void pblk_rb_write_entry_user(struct pblk_rb *rb, void *data,

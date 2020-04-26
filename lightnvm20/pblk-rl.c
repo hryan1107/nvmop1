@@ -134,6 +134,10 @@ static void __pblk_rl_update_rates(struct pblk_rl *rl,
 		rl->rb_gc_max = max - user_max;
 
 		if (free_blocks <= rl->rsv_blocks) {
+			/* MYOCSSD start */
+            printk("MYOCSSD pblkrl: Not allowed user I/O because free block is extremely low. USER_MAX=0, GC_MAX=%d\n", rl->rb_gc_max);                                                                                                                                                                   
+            /* MYOCSSD end */
+
 			rl->rb_user_max = 0;
 			rl->rb_gc_max = max;
 		}
@@ -144,6 +148,11 @@ static void __pblk_rl_update_rates(struct pblk_rl *rl,
 		 */
 		rl->rb_state = PBLK_RL_LOW;
 	}
+
+	/* MYOCSSD start */
+    printk("MYOCSSD pblkrl: free blocks=%lu, RL_HIGH=%u, RB_STATE=%d, USER_MAX=%d, GC_MAX=%d\n", free_blocks, rl->high, rl->rb_state, rl->rb_user_max, rl->rb_gc_max);
+
+    /* MYOCSSD end */
 
 	if (rl->rb_state != PBLK_RL_OFF)
 		pblk_gc_should_start(pblk);

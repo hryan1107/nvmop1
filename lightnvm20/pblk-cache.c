@@ -111,7 +111,8 @@ retry:
 	pblk_ppa_set_empty(&w_ctx.ppa);
 
 	/* NTU NVM start */
-    printk("MYOCSSD pblkcache: GC start copying %d valid pages to host write buffer.\n", gc_rq->secs_to_gc);
+    printk("MYOCSSD pblkcache: GC start copying line id, seq_nr: %u, %u to host write buffer.\n", gc_rq->line.id, gc_rq->line.seq_nr);
+	printk("MYOCSSD pblkcache: GC copys %d valid pages to host write buffer", gc_rq->secs_to_gc);
                                                                                 
     /* NTU NVM end */
 
@@ -124,9 +125,7 @@ retry:
 		pos = pblk_rb_wrap_pos(&pblk->rwb, bpos + valid_entries);
 		pblk_rb_write_entry_gc(&pblk->rwb, data, w_ctx, gc_rq->line,
 						gc_rq->paddr_list[i], pos);
-
-		printk("lba: %u, ppa: %u, line: %d\n");
-
+		
 		data += PBLK_EXPOSED_PAGE_SIZE;
 		valid_entries++;
 	}
