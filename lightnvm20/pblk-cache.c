@@ -111,7 +111,7 @@ retry:
 	pblk_ppa_set_empty(&w_ctx.ppa);
 
 	/* NTU NVM start */
-    printk("MYOCSSD pblkcache: GC start copying line id, seq_nr: %u, %u to host write buffer.\n", gc_rq->line.id, gc_rq->line.seq_nr);
+    printk("MYOCSSD pblkcache: GC start copying line id, seq_nr: %u, %u to host write buffer.\n", gc_rq->line->id, gc_rq->line->seq_nr);
 	printk("MYOCSSD pblkcache: GC copys %d valid pages to host write buffer", gc_rq->secs_to_gc);
                                                                                 
     /* NTU NVM end */
