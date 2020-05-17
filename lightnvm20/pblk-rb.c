@@ -276,7 +276,8 @@ static int __pblk_rb_update_l2p(struct pblk_rb *rb, unsigned int to_update)
 	
 	/* NTU NVM Start */
 	/* (total budget, user max, gc max, user current, gc current) */
-	printk("MYOCSSD prbuf internal: (%d, %d, %d, %d, %d)", &pblk->rl->rb_budget, &pblk->rl->rb_user_max, &pblk->rl->rb_gc_max, &pblk->rl->rb_user_cnt, &pblk->rl->rb_gc_cnt);
+	struct pblk_rl *rl = &pblk->rl; 
+	printk("MYOCSSD prbuf internal: (%d, %d, %d, %d, %d)", rl->rb_budget, rl->rb_user_max, rl->rb_gc_max, rl->rb_user_cnt, rl->rb_gc_cnt);
 
 	return 0;
 }
