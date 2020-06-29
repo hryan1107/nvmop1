@@ -17,6 +17,7 @@
  */
 
 #include "pblk.h"
+#include "pblk-trace.h"
 
 void pblk_write_to_cache(struct pblk *pblk, struct bio *bio,
 				unsigned long flags)
@@ -38,6 +39,7 @@ void pblk_write_to_cache(struct pblk *pblk, struct bio *bio,
 	 */
 retry:
 	ret = pblk_rb_may_write_user(&pblk->rwb, bio, nr_entries, &bpos);
+	trace_pblk_io_resch(nr_entries, ret);
 	switch (ret) {
 	case NVM_IO_REQUEUE:
 		io_schedule();

@@ -134,6 +134,32 @@ TRACE_EVENT(pblk_state,
 
 );
 
+/* NTU NVM OCSSD Start */
+/* ret = 1 -> requeue */
+/* (Number of inbound bio sectors, is_requeue) */
+TRACE_EVENT(pblk_io_resch,
+
+    TP_PROTO(int nr_entries, int ret),
+
+    TP_ARGS(nr_entries, ret),
+
+    TP_STRUCT__entry(
+        __field(int, nr_entries)
+        __field(int, ret)
+    ),
+
+    TP_fast_assign(
+        __entry->nr_entries = nr_entries;
+        __entry->ret = ret;
+    ),
+
+    TP_printk("%d , %d", (int)__entry->nr_entries, (int)__entry->ret)
+
+);
+
+/* NTU NVM OCSSD END */
+
+
 #endif /* !defined(_TRACE_PBLK_H) || defined(TRACE_HEADER_MULTI_READ) */
 
 /* This part must be outside protection */

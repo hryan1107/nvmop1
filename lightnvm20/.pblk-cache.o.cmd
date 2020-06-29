@@ -1031,6 +1031,11 @@ deps_drivers/lightnvm/pblk-cache.o := \
   include/linux/file.h \
   include/linux/dmapool.h \
     $(wildcard include/config/has/dma.h) \
+  drivers/lightnvm/pblk-trace.h \
+  include/linux/tracepoint.h \
+    $(wildcard include/config/have/syscall/tracepoints.h) \
+    $(wildcard include/config/tracepoint.h) \
+  include/trace/define_trace.h \
 
 drivers/lightnvm/pblk-cache.o: $(deps_drivers/lightnvm/pblk-cache.o)
 
