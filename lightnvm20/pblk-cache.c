@@ -123,13 +123,18 @@ retry:
 			continue;
 
 		w_ctx.lba = gc_rq->lba_list[i];
-
+		
 		pos = pblk_rb_wrap_pos(&pblk->rwb, bpos + valid_entries);
 		pblk_rb_write_entry_gc(&pblk->rwb, data, w_ctx, gc_rq->line,
 						gc_rq->paddr_list[i], pos);
 		
 		data += PBLK_EXPOSED_PAGE_SIZE;
 		valid_entries++;
+
+		/* NTU NVM OCSSD start */
+		pblk_pr_read_io("GC read", i, gc_rq->nr_secs, gc_rq->lba_list[i], false);
+
+		/* NTU NVM OCSSD end */
 	}
 
 	/* NTU NVM start */                                                                                                                                        

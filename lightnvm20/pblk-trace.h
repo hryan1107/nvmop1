@@ -168,7 +168,7 @@ TRACE_EVENT(pblk_io_resch,
 	format: (type, seq, size, lba, cached)
 */
 TRACE_EVENT(pblk_pr_read_io,
-    TP_PROTO(const char *type, int seq, int size, sector_t lba, bool cached),
+    TP_PROTO(const char *type, int seq, int size, u64 lba, bool cached),
 
     TP_ARGS(type, seq, size, lba, cached),
 
@@ -176,7 +176,7 @@ TRACE_EVENT(pblk_pr_read_io,
 		__string(type, type)
         __field(int, seq)
         __field(int, size)
-        __field(sector_t, lba)
+        __field(u64, lba)
         __field(bool, cached)
     ),
 
@@ -188,7 +188,7 @@ TRACE_EVENT(pblk_pr_read_io,
         __entry->cached = cached;
     ),
 
-    TP_printk("(%s, %d, %d, %ld, %d)", __get_str(type), (int)__entry->seq, (int)__entry->size, (sector_t)__entry->lba, (bool)__entry->cached)
+    TP_printk("(%s, %d, %d, %llu, %d)", __get_str(type), (int)__entry->seq, (int)__entry->size, (u64)__entry->lba, (bool)__entry->cached)
 );
 
 /* Print LBA on write io */
@@ -201,7 +201,7 @@ TRACE_EVENT(pblk_pr_read_io,
 	format: (type, seq, size, lba) 
 */
 TRACE_EVENT(pblk_pr_write_io,
-    TP_PROTO(const char *type, int seq, int size, sector_t lba),
+    TP_PROTO(const char *type, int seq, int size, u64 lba),
 
     TP_ARGS(type, seq, size, lba),
 
@@ -209,7 +209,7 @@ TRACE_EVENT(pblk_pr_write_io,
 		__string(type, type)
         __field(int, seq)
         __field(int, size)
-        __field(sector_t, lba)
+        __field(u64, lba)
     ),
 
     TP_fast_assign(
@@ -219,7 +219,7 @@ TRACE_EVENT(pblk_pr_write_io,
         __entry->lba = lba;
     ),
 
-    TP_printk("(%s, %d, %d, %ld)", __get_str(type), (int)__entry->seq, (int)__entry->size, (sector_t)__entry->lba)
+    TP_printk("(%s, %d, %d, %llu)", __get_str(type), (int)__entry->seq, (int)__entry->size, (u64)__entry->lba)
 );
 
 /* sectors submitted from buffer to ssd*/
