@@ -237,7 +237,7 @@ TRACE_EVENT(pblk_write_secs,
         __entry->nr_secs = nr_secs;
     ),
 
-    TP_printk("%ld", (int)__entry->nr_secs)
+    TP_printk("%d", (int)__entry->nr_secs)
 );
 
 /* NTU NVM OCSSD END */

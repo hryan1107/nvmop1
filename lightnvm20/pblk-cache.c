@@ -132,7 +132,7 @@ retry:
 		valid_entries++;
 
 		/* NTU NVM OCSSD start */
-		pblk_pr_read_io("GC read", i, gc_rq->nr_secs, gc_rq->lba_list[i], false);
+		trace_pblk_pr_read_io("GC read", i, gc_rq->nr_secs, gc_rq->lba_list[i], false);
 
 		/* NTU NVM OCSSD end */
 	}

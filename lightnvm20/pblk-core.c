@@ -2088,7 +2088,7 @@ int pblk_lookup_l2p_seq(struct pblk *pblk, struct ppa_addr *ppas,
 		}
 
 		/* NTU NVM OCSSD start */
-		pblk_pr_read_io("user read", i, nr_secs, blba + i, *from_cache);
+		trace_pblk_pr_read_io("user read", i, nr_secs, blba + i, *from_cache);
 
 		/* NTU NVM OCSSD end */
 	}
