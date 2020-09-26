@@ -152,12 +152,101 @@ TRACE_EVENT(pblk_io_resch,
         __entry->nr_entries = nr_entries;
         __entry->ret = ret;
     ),
-
+	
     TP_printk("%d , %d", (int)__entry->nr_entries, (int)__entry->ret)
 
 );
 
+/* Print LBA on read io */
+/* 
+	type: io type
+	seq: sector seq
+	size: io size
+	lba: 4k-sector logical address
+	cached: cache hit
+	
+	format: (type, seq, size, lba, cached)
+*/
+TRACE_EVENT(pblk_pr_read_io,
+    TP_PROTO(const char *type, int seq, int size, sector_t lba, bool cached),
+
+    TP_ARGS(type, seq, size, lba, cached),
+
+    TP_STRUCT__entry(
+		__string(type, type)
+        __field(int, seq)
+        __field(int, size)
+        __field(sector_t, lba)
+        __field(bool, cached)
+    ),
+
+    TP_fast_assign(
+		__assign_str(type, type);
+        __entry->seq = seq;
+        __entry->size = size;
+        __entry->lba = lba;
+        __entry->cached = cached;
+    ),
+
+    TP_printk("(%s, %d, %d, %ld, %d)", __get_str(type), (int)__entry->seq, (int)__entry->size, (sector_t)__entry->lba, (bool)__entry->cached)
+);
+
+/* Print LBA on write io */
+/* 
+	type: io type
+	seq: sector seq
+	size: io size
+	lba: 4k-sector logical address
+
+	format: (type, seq, size, lba) 
+*/
+TRACE_EVENT(pblk_pr_write_io,
+    TP_PROTO(const char *type, int seq, int size, sector_t lba),
+
+    TP_ARGS(type, seq, size, lba),
+
+    TP_STRUCT__entry(
+		__string(type, type)
+        __field(int, seq)
+        __field(int, size)
+        __field(sector_t, lba)
+    ),
+
+    TP_fast_assign(
+		__assign_str(type, type);
+        __entry->seq = seq;
+        __entry->size = size;
+        __entry->lba = lba;
+    ),
+
+    TP_printk("(%s, %d, %d, %ld)", __get_str(type), (int)__entry->seq, (int)__entry->size, (sector_t)__entry->lba)
+);
+
+/* sectors submitted from buffer to ssd*/
+TRACE_EVENT(pblk_write_secs,
+
+    TP_PROTO(long nr_secs),
+
+    TP_ARGS(nr_secs),
+
+    TP_STRUCT__entry(
+        __field(long, nr_secs)
+    ),
+
+    TP_fast_assign(
+        __entry->nr_secs = nr_secs;
+    ),
+
+    TP_printk("%ld", (int)__entry->nr_secs)
+);
+
+TRACE_EVENT(pblk_gc_acct,
+
+
+);
 /* NTU NVM OCSSD END */
+
+
 
 
 #endif /* !defined(_TRACE_PBLK_H) || defined(TRACE_HEADER_MULTI_READ) */

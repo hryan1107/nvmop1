@@ -2069,7 +2069,7 @@ int pblk_lookup_l2p_seq(struct pblk *pblk, struct ppa_addr *ppas,
 	spin_lock(&pblk->trans_lock);
 	for (i = 0; i < nr_secs; i++) {
 		struct ppa_addr ppa;
-
+		
 		ppa = ppas[i] = pblk_trans_map_get(pblk, blba + i);
 
 		/* If the L2P entry maps to a line, the reference is valid */
@@ -2086,6 +2086,11 @@ int pblk_lookup_l2p_seq(struct pblk *pblk, struct ppa_addr *ppas,
 				break;
 			*from_cache = true;
 		}
+
+		/* NTU NVM OCSSD start */
+		pblk_pr_read_io("user read", i, nr_secs, blba + i, *from_cache);
+
+		/* NTU NVM OCSSD end */
 	}
 	spin_unlock(&pblk->trans_lock);
 	return i;
