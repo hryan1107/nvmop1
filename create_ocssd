@@ -1,0 +1,1 @@
+qemu-img create -f ocssd -o num_grp=2,num_pu=4,num_chk=64 ocssd.img

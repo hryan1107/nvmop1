@@ -46,7 +46,7 @@ TRACE_EVENT(pblk_chunk_reset,
 	TP_STRUCT__entry(
 		__string(name, name)
 		__field(u64, ppa)
-		__field(int, state);
+		__field(int, state)
 	),
 
 	TP_fast_assign(
@@ -72,7 +72,7 @@ TRACE_EVENT(pblk_chunk_state,
 	TP_STRUCT__entry(
 		__string(name, name)
 		__field(u64, ppa)
-		__field(int, state);
+		__field(int, state)
 	),
 
 	TP_fast_assign(
@@ -98,7 +98,7 @@ TRACE_EVENT(pblk_line_state,
 	TP_STRUCT__entry(
 		__string(name, name)
 		__field(int, line)
-		__field(int, state);
+		__field(int, state)
 	),
 
 	TP_fast_assign(
@@ -121,7 +121,7 @@ TRACE_EVENT(pblk_state,
 
 	TP_STRUCT__entry(
 		__string(name, name)
-		__field(int, state);
+		__field(int, state)
 	),
 
 	TP_fast_assign(
@@ -133,6 +133,117 @@ TRACE_EVENT(pblk_state,
 			show_pblk_state((int)__entry->state))
 
 );
+
+/* NTU NVM OCSSD Start */
+/* ret = 1 -> requeue */
+/* (Number of inbound bio sectors, is_requeue) */
+TRACE_EVENT(pblk_io_resch,
+
+    TP_PROTO(int nr_entries, int ret),
+
+    TP_ARGS(nr_entries, ret),
+
+    TP_STRUCT__entry(
+        __field(int, nr_entries)
+        __field(int, ret)
+    ),
+
+    TP_fast_assign(
+        __entry->nr_entries = nr_entries;
+        __entry->ret = ret;
+    ),
+	
+    TP_printk("%d , %d", (int)__entry->nr_entries, (int)__entry->ret)
+
+);
+
+/* Print LBA on read io */
+/* 
+	type: io type
+	seq: sector seq
+	size: io size
+	lba: 4k-sector logical address
+	cached: cache hit
+	
+	format: (type, seq, size, lba, cached)
+*/
+TRACE_EVENT(pblk_pr_read_io,
+    TP_PROTO(const char *type, int seq, int size, u64 lba, bool cached),
+
+    TP_ARGS(type, seq, size, lba, cached),
+
+    TP_STRUCT__entry(
+		__string(type, type)
+        __field(int, seq)
+        __field(int, size)
+        __field(u64, lba)
+        __field(bool, cached)
+    ),
+
+    TP_fast_assign(
+		__assign_str(type, type);
+        __entry->seq = seq;
+        __entry->size = size;
+        __entry->lba = lba;
+        __entry->cached = cached;
+    ),
+
+    TP_printk("(%s, %d, %d, %llu, %d)", __get_str(type), (int)__entry->seq, (int)__entry->size, (u64)__entry->lba, (bool)__entry->cached)
+);
+
+/* Print LBA on write io */
+/* 
+	type: io type
+	seq: sector seq
+	size: io size
+	lba: 4k-sector logical address
+
+	format: (type, seq, size, lba) 
+*/
+TRACE_EVENT(pblk_pr_write_io,
+    TP_PROTO(const char *type, int seq, int size, u64 lba),
+
+    TP_ARGS(type, seq, size, lba),
+
+    TP_STRUCT__entry(
+		__string(type, type)
+        __field(int, seq)
+        __field(int, size)
+        __field(u64, lba)
+    ),
+
+    TP_fast_assign(
+		__assign_str(type, type);
+        __entry->seq = seq;
+        __entry->size = size;
+        __entry->lba = lba;
+    ),
+
+    TP_printk("(%s, %d, %d, %llu)", __get_str(type), (int)__entry->seq, (int)__entry->size, (u64)__entry->lba)
+);
+
+/* sectors submitted from buffer to ssd*/
+TRACE_EVENT(pblk_write_secs,
+
+    TP_PROTO(long nr_secs),
+
+    TP_ARGS(nr_secs),
+
+    TP_STRUCT__entry(
+        __field(long, nr_secs)
+    ),
+
+    TP_fast_assign(
+        __entry->nr_secs = nr_secs;
+    ),
+
+    TP_printk("%d", (int)__entry->nr_secs)
+);
+
+/* NTU NVM OCSSD END */
+
+
+
 
 #endif /* !defined(_TRACE_PBLK_H) || defined(TRACE_HEADER_MULTI_READ) */
 

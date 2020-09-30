@@ -17,6 +17,7 @@
  */
 
 #include "pblk.h"
+#include "pblk-trace.h"
 
 void pblk_write_to_cache(struct pblk *pblk, struct bio *bio,
 				unsigned long flags)
@@ -38,6 +39,7 @@ void pblk_write_to_cache(struct pblk *pblk, struct bio *bio,
 	 */
 retry:
 	ret = pblk_rb_may_write_user(&pblk->rwb, bio, nr_entries, &bpos);
+	trace_pblk_io_resch(nr_entries, ret);
 	switch (ret) {
 	case NVM_IO_REQUEUE:
 		io_schedule();
@@ -110,28 +112,35 @@ retry:
 	w_ctx.flags = PBLK_IOTYPE_GC;
 	pblk_ppa_set_empty(&w_ctx.ppa);
 
-    /* NVM OP1 start */
-    printk("MYOCSSD pblkcache: GC start copying valid data to host write buffer.\n");
+	/* NTU NVM start */
+    printk("MYOCSSD pblkcache: GC start copying line id, seq_nr: %u, %u to host write buffer.\n", gc_rq->line->id, gc_rq->line->seq_nr);
+	printk("MYOCSSD pblkcache: GC copys %d valid pages to host write buffer", gc_rq->secs_to_gc);
+                                                                                
+    /* NTU NVM end */
 
-    /* NVM OP1 end */
 	for (i = 0, valid_entries = 0; i < gc_rq->nr_secs; i++) {
 		if (gc_rq->lba_list[i] == ADDR_EMPTY)
 			continue;
 
 		w_ctx.lba = gc_rq->lba_list[i];
-
+		
 		pos = pblk_rb_wrap_pos(&pblk->rwb, bpos + valid_entries);
 		pblk_rb_write_entry_gc(&pblk->rwb, data, w_ctx, gc_rq->line,
 						gc_rq->paddr_list[i], pos);
-
+		
 		data += PBLK_EXPOSED_PAGE_SIZE;
 		valid_entries++;
+
+		/* NTU NVM OCSSD start */
+		trace_pblk_pr_read_io("GC read", i, gc_rq->nr_secs, gc_rq->lba_list[i], false);
+
+		/* NTU NVM OCSSD end */
 	}
 
-    /* NVM OP1 start */
+	/* NTU NVM start */                                                                                                                                        
     printk("MYOCSSD pblkcache(%d): GC finish copying valid data which occupy %d entries of host write buffer.\n", valid_entries, valid_entries);
 
-    /* NVM OP1 end */
+    /* NTU NVM end */
 
 	WARN_ONCE(gc_rq->secs_to_gc != valid_entries,
 					"pblk: inconsistent GC write\n");

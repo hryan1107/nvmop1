@@ -110,10 +110,11 @@ int pblk_rb_init(struct pblk_rb *rb, unsigned int size, unsigned int threshold,
 		iter = 1;
 	}
 
-    /* NVM OP1 start*/
+	/* NTU NVM start*/
     printk("MYOCSSD pblkrb: created %u buffer entries, initial write buffer Number of entries = %u, order = %u, iter = %u\n", nr_entries, rb->nr_entries, order, iter);
+                                                                                                                                                     
+    /* NTU NVM end */
 
-    /* NVM OP1 end */
 
 	do {
 		struct pblk_rb_entry *entry;
@@ -272,6 +273,10 @@ static int __pblk_rb_update_l2p(struct pblk_rb *rb, unsigned int to_update)
 	}
 
 	pblk_rl_out(&pblk->rl, user_io, gc_io);
+	
+	/* NTU NVM Start */
+	/* (total budget, user max, gc max, user current, gc current) */
+	printk("MYOCSSD prbuf internal: (%d, %d, %d, %d, %d)", (&pblk->rl)->rb_budget, (&pblk->rl)->rb_user_max, (&pblk->rl)->rb_gc_max, (&pblk->rl)->rb_user_cnt.counter, (&pblk->rl)->rb_gc_cnt.counter);
 
 	return 0;
 }
@@ -333,6 +338,17 @@ static void __pblk_rb_write_entry(struct pblk_rb *rb, void *data,
 				  struct pblk_w_ctx w_ctx,
 				  struct pblk_rb_entry *entry)
 {
+	/* NTU NVM */
+    printk("MYOCSSD pblkrb: IO type %d start copy data to buffer entry\n", w_ctx.flags);
+
+	if(w_ctx.flags == 1){
+		printk("MYOCSSD pblkrb: User write LBA = %llu\n", w_ctx.lba);
+	}else if (w_ctx.flags == 2){	
+		printk("MYOCSSD pblkrb: GC write LBA = %llu\n", w_ctx.lba);
+	}else{
+		printk("MYOCSSD pblkrb: other IO type\n");
+	}
+
 	memcpy(entry->data, data, rb->seg_size);
 
 	entry->w_ctx.lba = w_ctx.lba;
@@ -381,6 +397,13 @@ void pblk_rb_write_entry_gc(struct pblk_rb *rb, void *data,
 
 	if (!pblk_update_map_gc(pblk, w_ctx.lba, entry->cacheline, line, paddr))
 		entry->w_ctx.lba = ADDR_EMPTY;
+
+	/* NTU NVM Begin */
+    printk("MYOCSSD pblkrb user or gc write lba, ppa: %llu, %llu\n", entry->w_ctx.lba, entry->w_ctx.ppa.ppa);
+    printk("MYOCSSD pblkrb grp, pu, chk, sec: %u, %u, %u, %u\n", entry->w_ctx.ppa.m.grp, entry->w_ctx.ppa.m.pu, entry->w_ctx.ppa.m.chk, entry->w_ctx.ppa.m.sec);
+
+    /* NTU NVM End */
+
 
 	flags = w_ctx.flags | PBLK_WRITTEN_DATA;
 
@@ -531,11 +554,19 @@ int pblk_rb_may_write_gc(struct pblk_rb *rb, unsigned int nr_entries,
 	spin_lock(&rb->w_lock);
 	if (!pblk_rl_gc_may_insert(&pblk->rl, nr_entries)) {
 		spin_unlock(&rb->w_lock);
+		
+		/* NTU NVM */
+		printk("MYOCSSD: buffer block GC write. rl budget not enough.");
+
 		return 0;
 	}
 
 	if (!pblk_rb_may_write(rb, nr_entries, pos)) {
 		spin_unlock(&rb->w_lock);
+		
+		 /* NTU NVM */
+        printk("MYOCSSD: buffer block GC write. Buffer space not enough.");  
+
 		return 0;
 	}
 
