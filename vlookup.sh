@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Description:
+# 	This script is created to compare lba of two different io (e.g. user io and
+#	GC io) also extract lba timeline
+#
+# arg 1: read_io_trace
+
 if [ $# -eq 0 ]; then
 	echo "No input file."
 	exit 1
