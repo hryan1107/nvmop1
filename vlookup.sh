@@ -13,8 +13,8 @@ fi
 
 cat $1 | grep "user read" | sed 's/[,:]//g' | awk '{print $10}' > userio_lba
 cat $1 | grep "GC read" | sed 's/[,:]//g' | awk '{print $10}' > gcio_lba
-cat $1 | grep "user read" | sed 's/[,:]//g' | awk '{out=" "$4" "$10; print out}' | awk '{print $2 " " $1}' > userio_lba_ts.csv
-cat $1 | grep "GC read" | sed 's/[,:]//g' | awk '{out=" "$4" "$10; print out}' | awk '{print $2 " " $1}' > gcio_lba_ts.csv
+cat $1 | grep "user read" | sed 's/[,:]//g' | awk '{out=" "$4" "$10; print out}' | awk '{print $2 " " $1}' | sed 's/ /,/g' > userio_lba_ts.csv
+cat $1 | grep "GC read" | sed 's/[,:]//g' | awk '{out=" "$4" "$10; print out}' | awk '{print $2 " " $1}' | sed 's/ /,/g' > gcio_lba_ts.csv
 
 comm -12 <(sort userio_lba) <(sort gcio_lba) > comm_lba
 
